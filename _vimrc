@@ -16,11 +16,11 @@ if has('vim_starting')
   set nocompatible               " Be iMproved
 
   " Required:
-  set runtimepath+=~/dotfiles/.vim/bundle/neobundle.vim/
+  set runtimepath+=~/dotfiles/vimfiles/bundle/neobundle.vim/
 endif
 
 " Required:
-call neobundle#begin(expand('~/dotfiles/.vim/bundle/'))
+call neobundle#begin(expand('~/dotfiles/vimfiles/bundle/'))
 
 " Let NeoBundle manage NeoBundle
 " Required:
