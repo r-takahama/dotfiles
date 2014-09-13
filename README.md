@@ -5,7 +5,7 @@ cd ~/
 git clone add https://github.com/r-takahama/dotfiles.git
 cd ~/dotfiles/
 sh dotfilesSetup.sh
-
+```
 
 ## Memo
 これとvim関連の参照元を以下にまとめる
