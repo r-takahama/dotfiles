@@ -1,4 +1,13 @@
 #dotfiles
+## Usage
+```
+cd ~/
+git clone add https://github.com/r-takahama/dotfiles.git
+cd ~/dotfiles/
+sh dotfilesSetup.sh
+
+
+## Memo
 これとvim関連の参照元を以下にまとめる
 - [脱初心者を目指すVimmerにオススメしたいVimプラグインや.vimrcの設定](http://qiita.com/jnchito/items/5141b3b01bced9f7f48f)
   - ここで掲載されているvimrcをとりあえず完全にパクった
