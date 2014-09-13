@@ -1,6 +1,6 @@
 " 文字コードの自動判別
 set encoding=utf-8
-set fileencodings=iso-2022-jp,euc-jp,sjis,utf-8
+set fileencodings=utf-8
 " 改行コードの自動認識
 set fileformats=unix,dos,mac
 
@@ -16,11 +16,11 @@ if has('vim_starting')
   set nocompatible               " Be iMproved
 
   " Required:
-  set runtimepath+=~/dotfiles/vimfiles/bundle/neobundle.vim/
+  set runtimepath+=~/dotfiles/.vim/neobundle/neobundle.vim/
 endif
 
 " Required:
-call neobundle#begin(expand('~/dotfiles/vimfiles/bundle/'))
+call neobundle#begin(expand('~/dotfiles/.vim/neobundle/'))
 
 " Let NeoBundle manage NeoBundle
 " Required:
@@ -92,7 +92,7 @@ set wildmenu
 " 入力中のコマンドを表示する
 set showcmd
 " バックアップディレクトリの指定(でもバックアップは使ってない)
-set backupdir=$HOME/dotfiles/vimfiles/.vimbackup
+set backupdir=$HOME/dotfiles/.vim/backup
 " バッファで開いているファイルのディレクトリでエクスクローラを開始する(でもエクスプローラって使ってない)
 set browsedir=buffer
 " 小文字のみで検索したときに大文字小文字を無視する
