@@ -1,242 +1,373 @@
-" 文字コードの自動判別
-set encoding=utf-8
-set fileencodings=utf-8
-" 改行コードの自動認識
-set fileformats=unix,dos,mac
-
-" 挙動を vi 互換ではなく、Vim のデフォルト設定にする
+" vi 互換ではなくVim のデフォルト設定にする
 set nocompatible
-" 一旦ファイルタイプ関連を無効化する
+" 一旦ファイルタイプ関連を無効化
 filetype off
-
-""""""""""""""""""""""""""""""
-" プラグインのセットアップ
-""""""""""""""""""""""""""""""
+" neobundleでプラグインを管理
 if has('vim_starting')
-  set nocompatible               " Be iMproved
-
-  " Required:
-  set runtimepath+=~/dotfiles/.vim/neobundle/neobundle.vim/
+set runtimepath+=~/dotfiles/.vim/neobundle/neobundle.vim/
 endif
-
-" Required:
-call neobundle#begin(expand('~/dotfiles/.vim/neobundle/'))
-
-" Let NeoBundle manage NeoBundle
-" Required:
-NeoBundleFetch 'Shougo/neobundle.vim'
-
-" ファイルオープンを便利に
+call neobundle#rc(expand('~/dotfiles/.vim/neobundle'))
+NeoBundle 'Shougo/neobundle.vim'
+" 以下のプラグインをバンドル
 NeoBundle 'Shougo/unite.vim'
-" Unite.vimで最近使ったファイルを表示できるようにする
-NeoBundle 'Shougo/neomru.vim'
-" ファイルをtree表示してくれる
+NeoBundle 'Shougo/vimfiler'
+NeoBundle 'Shougo/vimproc'
+NeoBundle 'VimClojure'
+NeoBundle 'Shougo/vimshell'
+NeoBundle 'jpalardy/vim-slime'
+NeoBundle 'scrooloose/syntastic'
 NeoBundle 'scrooloose/nerdtree'
-" Gitを便利に使う
-NeoBundle 'tpope/vim-fugitive'
-
-" Rails向けのコマンドを提供する
-NeoBundle 'tpope/vim-rails'
-" Ruby向けにendを自動挿入してくれる
-NeoBundle 'tpope/vim-endwise'
-
-" コメントON/OFFを手軽に実行
+NeoBundle 'mattn/zencoding-vim'
+NeoBundle 'open-browser.vim'
+NeoBundle 'mattn/webapi-vim'
+NeoBundle 'tell-k/vim-browsereload-mac'
+NeoBundle 'hail2u/vim-css3-syntax'
+NeoBundle 'taichouchou2/html5.vim'
+NeoBundle 'taichouchou2/vim-javascript'
+NeoBundle 'kchmck/vim-coffee-script'
+NeoBundle 'tpope/vim-endwise.git' 
+NeoBundle 'ruby-matchit'
+NeoBundle 'vim-scripts/dbext.vim'
+NeoBundle 'taichouchou2/vim-rsense'
 NeoBundle 'tomtom/tcomment_vim'
-" シングルクオートとダブルクオートの入れ替え等
-NeoBundle 'tpope/vim-surround'
-
-" インデントに色を付けて見やすくする
-NeoBundle 'nathanaelkane/vim-indent-guides'
-" ログファイルを色づけしてくれる
-NeoBundle 'vim-scripts/AnsiEsc.vim'
-" 行末の半角スペースを可視化(うまく動かない？)
-NeoBundle 'bronson/vim-trailing-whitespace'
-" less用のsyntaxハイライト
-NeoBundle 'KohPoll/vim-less'
-
-" 余談: neocompleteは合わなかった。ctrl+pで補完するのが便利
-
-call neobundle#end()
-
-" Required:
-filetype plugin indent on
-
-" If there are uninstalled bundles found on startup,
-" this will conveniently prompt you to install them.
-NeoBundleCheck
-""""""""""""""""""""""""""""""
-
-""""""""""""""""""""""""""""""
-" 各種オプションの設定
-""""""""""""""""""""""""""""""
-" ESCキーのバインド
-imap <C-j> <esc>
-" タグファイルの指定(でもタグジャンプは使ったことがない)
-set tags=~/.tags
-" スワップファイルは使わない(ときどき面倒な警告が出るだけで役に立ったことがない)
-set noswapfile
-" カーソルが何行目の何列目に置かれているかを表示する
-set ruler
-" コマンドラインに使われる画面上の行数
-set cmdheight=2
-" エディタウィンドウの末尾から2行目にステータスラインを常時表示させる
-set laststatus=2
-" ステータス行に表示させる情報の指定(どこからかコピペしたので細かい意味はわかっていない)
-set statusline=%<%f\ %m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%l,%c%V%8P
-" ステータス行に現在のgitブランチを表示する
-set statusline+=%{fugitive#statusline()}
-" ウインドウのタイトルバーにファイルのパス情報等を表示する
-set title
-" コマンドラインモードで<Tab>キーによるファイル名補完を有効にする
-set wildmenu
-" 入力中のコマンドを表示する
-set showcmd
-" バックアップディレクトリの指定(でもバックアップは使ってない)
-set backupdir=$HOME/dotfiles/.vim/backup
-" バッファで開いているファイルのディレクトリでエクスクローラを開始する(でもエクスプローラって使ってない)
-set browsedir=buffer
-" 小文字のみで検索したときに大文字小文字を無視する
-set smartcase
-" 検索結果をハイライト表示する
-set hlsearch
-" 暗い背景色に合わせた配色にする
-set background=dark
-" タブ入力を複数の空白入力に置き換える
-set expandtab
-" 検索ワードの最初の文字を入力した時点で検索を開始する
-set incsearch
-" 保存されていないファイルがあるときでも別のファイルを開けるようにする
-set hidden
-" 不可視文字を表示する
-set list
-" タブと行の続きを可視化する
-set listchars=tab:>\ ,extends:<
-" 行番号を表示する
-set number
-" 対応する括弧やブレースを表示する
-set showmatch
-" 改行時に前の行のインデントを継続する
-set autoindent
-" 改行時に入力された行の末尾に合わせて次の行のインデントを増減する
-set smartindent
-" タブ文字の表示幅
-set tabstop=2
-" Vimが挿入するインデントの幅
-set shiftwidth=2
-" 行頭の余白内で Tab を打ち込むと、'shiftwidth' の数だけインデントする
-set smarttab
-" カーソルを行頭、行末で止まらないようにする
-set whichwrap=b,s,h,l,<,>,[,]
-" 構文毎に文字色を変化させる
+NeoBundle 'taichouchou2/vim-rails'
+NeoBundle 'romanvbabenko/rails.vim'
+NeoBundle 'ujihisa/unite-rake'
+NeoBundle 'basyura/unite-rails'
+NeoBundle 'thinca/vim-ref'
+NeoBundle 'taichouchou2/vim-ref-ri'
+NeoBundle 'taq/vim-rspec'
+NeoBundle 'scrooloose/nerdtree'
+NeoBundle 'Lokaltog/powerline'
+" Perl関連プラグインをバンドル
+NeoBundle 'petdance/vim-perl'
+NeoBundle 'hotchpotch/perldoc-vim'
+" シンタックス系プラグインをバンドル
+NeoBundle 'Shougo/neocomplcache'
+NeoBundle 'Shougo/neosnippet'
+" 実行プラグインをバンドル
+NeoBundle 'thinca/vim-quickrun'
+" 編集履歴管理
+NeoBundle "sjl/gundo.vim"
+set t_Co=256
+" ファイラー関連
+nnoremap <Leader>e :VimFilerExplorer<CR>
+nnoremap <Leader>g :GundoToggle<CR>
+let g:vimfiler_enable_auto_cd = 1
+let g:vimfiler_as_default_explorer = 1
+"mru,reg,buf
+noremap :um :Unite file_mru -buffer-name=file_mru
+noremap :ur :Unite register -buffer-name=register
+noremap :ub :Unite buffer -buffer-name=buffer
+nnoremap <C-u>m  :Unite file_mru<CR>
+" 環境設定系
+" シンタックスハイライト
 syntax on
-" カラースキーマの指定
-colorscheme desert
-" 行番号の色
-highlight LineNr ctermfg=darkyellow
-""""""""""""""""""""""""""""""
-
-" vimを立ち上げたときに、自動的にvim-indent-guidesをオンにする
-let g:indent_guides_enable_on_vim_startup = 1
-
-" grep検索の実行後にQuickFix Listを表示する
-autocmd QuickFixCmdPost *grep* cwindow
-
-" http://blog.remora.cx/2010/12/vim-ref-with-unite.html
-""""""""""""""""""""""""""""""
-" Unit.vimの設定
-""""""""""""""""""""""""""""""
-" 入力モードで開始する
-let g:unite_enable_start_insert=1
-" バッファ一覧
-noremap <C-P> :Unite buffer<CR>
-" ファイル一覧
-noremap <C-N> :Unite -buffer-name=file file<CR>
-" 最近使ったファイルの一覧
-noremap <C-Z> :Unite file_mru<CR>
-" sourcesを「今開いているファイルのディレクトリ」とする
-noremap :uff :<C-u>UniteWithBufferDir file -buffer-name=file<CR>
-" ウィンドウを分割して開く
-au FileType unite nnoremap <silent> <buffer> <expr> <C-J> unite#do_action('split')
-au FileType unite inoremap <silent> <buffer> <expr> <C-J> unite#do_action('split')
-" ウィンドウを縦に分割して開く
-au FileType unite nnoremap <silent> <buffer> <expr> <C-K> unite#do_action('vsplit')
-au FileType unite inoremap <silent> <buffer> <expr> <C-K> unite#do_action('vsplit')
-" ESCキーを2回押すと終了する
-au FileType unite nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
-au FileType unite inoremap <silent> <buffer> <ESC><ESC> <ESC>:q<CR>
-""""""""""""""""""""""""""""""
-
-" http://inari.hatenablog.com/entry/2014/05/05/231307
-""""""""""""""""""""""""""""""
-" 全角スペースの表示
-""""""""""""""""""""""""""""""
-function! ZenkakuSpace()
-    highlight ZenkakuSpace cterm=underline ctermfg=lightblue guibg=darkgray
-endfunction
-
-if has('syntax')
-    augroup ZenkakuSpace
-        autocmd!
-        autocmd ColorScheme * call ZenkakuSpace()
-        autocmd VimEnter,WinEnter,BufRead * let w:m1=matchadd('ZenkakuSpace', '　')
-    augroup END
-    call ZenkakuSpace()
-endif
-""""""""""""""""""""""""""""""
-
-" https://sites.google.com/site/fudist/Home/vim-nihongo-ban/-vimrc-sample
-""""""""""""""""""""""""""""""
-" 挿入モード時、ステータスラインの色を変更
-""""""""""""""""""""""""""""""
-let g:hi_insert = 'highlight StatusLine guifg=darkblue guibg=darkyellow gui=none ctermfg=blue ctermbg=yellow cterm=none'
-
-if has('syntax')
-  augroup InsertHook
-    autocmd!
-    autocmd InsertEnter * call s:StatusLine('Enter')
-    autocmd InsertLeave * call s:StatusLine('Leave')
-  augroup END
-endif
-
-let s:slhlcmd = ''
-function! s:StatusLine(mode)
-  if a:mode == 'Enter'
-    silent! let s:slhlcmd = 'highlight ' . s:GetHighlight('StatusLine')
-    silent exec g:hi_insert
-  else
-    highlight clear StatusLine
-    silent exec s:slhlcmd
+" エンコード
+set encoding=utf8
+" ファイルエンコード
+set fileencoding=utf-8
+" スクロールする時に下が見えるようにする
+set scrolloff=5
+" .swapファイルを作らない
+set noswapfile
+" バックアップファイルを作らない
+set nowritebackup
+" バックアップをしない
+set nobackup
+" バックスペースで各種消せるようにする
+set backspace=indent,eol,start
+" ビープ音を消す
+set vb t_vb=
+set novisualbell
+" OSのクリップボードを使う
+set clipboard+=unnamed
+set clipboard=unnamed
+" 不可視文字を表示
+set list
+" 行番号を表示
+set number
+" 右下に表示される行・列の番号を表示する
+set ruler
+" compatibleオプションをオフにする
+set nocompatible
+" 移動コマンドを使ったとき、行頭に移動しない
+set nostartofline
+" 対応括弧に<と>のペアを追加
+set matchpairs& matchpairs+=<:>
+" 対応括弧をハイライト表示する
+set showmatch
+" 対応括弧の表示秒数を3秒にする
+set matchtime=3
+" ウィンドウの幅より長い行は折り返され、次の行に続けて表示される
+set wrap
+" 入力されているテキストの最大幅を無効にする
+set textwidth=0
+" 不可視文字を表示
+set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:↲
+" インデントをshiftwidthの倍数に丸める
+set shiftround
+" 補完の際の大文字小文字の区別しない
+set infercase
+" 文字がない場所にもカーソルを移動できるようにする
+set virtualedit=all
+" 変更中のファイルでも、保存しないで他のファイルを表示
+set hidden
+" 新しく開く代わりにすでに開いてあるバッファを開く
+set switchbuf=useopen
+" 小文字の検索でも大文字も見つかるようにする
+set ignorecase
+" ただし大文字も含めた検索の場合はその通りに検索する
+set smartcase
+" インクリメンタルサーチを行う
+set incsearch
+" 検索結果をハイライト表示
+:set hlsearch
+" コマンド、検索パターンを10000個まで履歴に残す
+set history=10000
+" マウスモード有効
+set mouse=a
+" xtermとscreen対応
+set ttymouse=xterm2
+" コマンドを画面最下部に表示する
+set showcmd
+ 
+ 
+" w!! でスーパーユーザーとして保存(sudoが使える環境限定)
+cmap w!! w !sudo tee > /dev/null %
+" 入力モード中に素早くJJと入力した場合はESCとみなす
+inoremap jj <Esc>
+" ESCを二回押すことでハイライトを消す
+nmap <silent> <Esc><Esc> :nohlsearch<CR>
+" カーソル下の単語を * で検索
+vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v, '\/'), "\n", '\\n', 'g')<CR><CR>
+" 検索後にジャンプした際に検索単語を画面中央に持ってくる
+nnoremap n nzz
+nnoremap N Nzz
+nnoremap * *zz
+nnoremap # #zz
+nnoremap g* g*zz
+nnoremap g# g#zz
+" j, k による移動を折り返されたテキストでも自然に振る舞うように変更
+nnoremap j gj
+nnoremap k gk
+" vを二回で行末まで選択
+vnoremap v $h
+" TABにて対応ペアにジャンプ
+nnoremap &lt;Tab&gt; %
+vnoremap &lt;Tab&gt; %
+" Ctrl + hjkl でウィンドウ間を移動
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+" Shift + 矢印でウィンドウサイズを変更
+nnoremap <S-Left>  <C-w><<CR>
+nnoremap <S-Right> <C-w><CR>
+nnoremap <S-Up>    <C-w>-<CR>
+nnoremap <S-Down>  <C-w>+<CR>
+" T + ? で各種設定をトグル
+nnoremap [toggle] <Nop>
+nmap T [toggle]
+nnoremap <silent> [toggle]s :setl spell!<CR>:setl spell?<CR>
+nnoremap <silent> [toggle]l :setl list!<CR>:setl list?<CR>
+nnoremap <silent> [toggle]t :setl expandtab!<CR>:setl expandtab?<CR>
+nnoremap <silent> [toggle]w :setl wrap!<CR>:setl wrap?<CR>
+ 
+" :e などでファイルを開く際にフォルダが存在しない場合は自動作成
+function! s:mkdir(dir, force)
+  if !isdirectory(a:dir) && (a:force ||
+        \ input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
+    call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
   endif
 endfunction
-
-function! s:GetHighlight(hi)
-  redir => hl
-  exec 'highlight '.a:hi
-  redir END
-  let hl = substitute(hl, '[\r\n]', '', 'g')
-  let hl = substitute(hl, 'xxx', '', '')
-  return hl
+ 
+" vim 起動時のみカレントディレクトリを開いたファイルの親ディレクトリに指定 
+function! s:ChangeCurrentDir(directory, bang)
+    if a:directory == ''
+        lcd %:p:h
+    else
+        execute 'lcd' . a:directory
+    endif
+ 
+    if a:bang == ''
+        pwd
+    endif
 endfunction
-""""""""""""""""""""""""""""""
-
-""""""""""""""""""""""""""""""
-" 最後のカーソル位置を復元する
-""""""""""""""""""""""""""""""
-if has("autocmd")
-    autocmd BufReadPost *
-    \ if line("'\"") > 0 && line ("'\"") <= line("$") |
-    \   exe "normal! g'\"" |
-    \ endif
+ 
+" ~/.vimrc.localが存在する場合のみ設定を読み込む
+let s:local_vimrc = expand('~/.vimrc.local')
+if filereadable(s:local_vimrc)
+    execute 'source ' . s:local_vimrc
 endif
-""""""""""""""""""""""""""""""
-
-""""""""""""""""""""""""""""""
-" 自動的に閉じ括弧を入力
-""""""""""""""""""""""""""""""
-imap { {}<LEFT>
-imap [ []<LEFT>
-imap ( ()<LEFT>
-""""""""""""""""""""""""""""""
-
-" filetypeの自動検出(最後の方に書いた方がいいらしい)
-filetype on
+ 
+" /{pattern}の入力中は「/」をタイプすると自動で「\/」が、
+" ?{pattern}の入力中は「?」をタイプすると自動で「\?」が 入力されるようになる
+cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
+cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
+if has('unnamedplus')
+    set clipboard& clipboard+=unnamedplus
+else
+    set clipboard& clipboard+=unnamed,autoselect
+endif
+ 
+"表示行単位で行移動する
+nnoremap <silent> j gj
+nnoremap <silent> k gk
+"インサートモードでも移動
+inoremap <c-d> <delete>
+inoremap <c-j> <down>
+inoremap <c-k> <up>
+inoremap <c-h> <left>
+inoremap <c-l> <right>
+"画面切り替え
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+nnoremap <c-l> <c-w>l
+nnoremap <c-h> <c-w>h
+"<space>j, <space>kで画面送り
+noremap [Prefix]j <c-f><cr><cr>
+noremap [Prefix]k <c-b><cr><cr>
+ 
+" PHP用設定
+" PHP辞書ファイル指定
+autocmd FileType php,ctp :set dictionary=~/.vim/dict/php.dict
+" :makeでPHP構文チェック
+au FileType php setlocal makeprg=php\ -l\ %
+au FileType php setlocal errorformat=%m\ in\ %f\ on\ line\ %l
+" PHPの関数やクラスの折りたたみ
+let php_folding = 0
+" 文字列の中のSQLをハイライト
+let php_sql_query = 1
+" Baselibメソッドのハイライト
+let php_baselib = 1
+" HTMLもハイライト
+let php_htmlInStrings = 1
+" <? を無効にする→ハイライト除外にする
+let php_noShortTags = 1
+" ] や ) の対応エラーをハイライト
+let php_parent_error_close = 1
+let php_parent_error_open = 1
+" SQLのPHP文字リテラルへの整形(:Sqltop, :Sqlfromp)
+function! SQLToPHP()
+%s/^\(.\+\)$/"\1 " \./g
+ 
+normal G$
+execute "normal ?.&lt;CR&gt;"
+normal xxggVG
+echo "Convert to PHP String is finished."
+endfunction
+command! Sqltop :call SQLToPHP()
+function! SQLFromPHP()
+%s/^"\(.\+\) " *\.*$/\1/g
+ 
+normal ggVG
+echo "Convert from PHP String is finished."
+endfunction
+command! Sqlfromp :call SQLFromPHP()
+" ハイライト色設定
+highlight Pmenu ctermbg=4
+highlight PmenuSel ctermbg=1
+highlight PMenuSbar ctermbg=4
+ 
+" neocomplcacheを起動時に有効化する
+let g:neocomplcache_enable_at_startup = 1
+" 大文字を区切りとしたワイルドカードのように振る舞う機能
+let g:neocomplcache_enable_camel_case_completion = 1
+" _区切りの補完を有効化
+let g:neocomplcache_enable_underbar_completion = 1
+" 大文字が入力されるまで大文字小文字の区別を無視する
+let g:neocomplcache_smart_case = 1
+" シンタックスをキャッシュするときの最小文字長を3に
+let g:neocomplcache_min_syntax_length = 3
+"手動補完時に補完を行う入力数を制御
+let g:neocomplcache_manual_completion_start_length = 0
+let g:neocomplcache_caching_percent_in_statusline = 1
+let g:neocomplcache_enable_skip_completion = 1
+let g:neocomplcache_skip_input_time = '0.5'
+ 
+" Perl用設定
+autocmd BufNewFile,BufRead *.psgi   set filetype=perl
+autocmd BufNewFile,BufRead *.t      set filetype=perl
+" Enable snipMate compatibility feature.↲
+let g:neosnippet#enable_snipmate_compatibility = 1
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+" SuperTab like snippets behavior.
+imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: pumvisible() ? "\<C-n>" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: "\<TAB>"
+ 
+" For snippet_complete marker.
+if has('conceal')
+  set conceallevel=2 concealcursor=i
+endif
+" Tell Neosnippet about the other snippets
+let g:neosnippet#snippets_directory='~/.vim/snippets/snippets'
+" Define dictionary.
+let g:neocomplcache_dictionary_filetype_lists = { 'default'    : '', 'perl'       : $HOME . '/.vim/dict/perl.dict' }
+ 
+" Java用設定
+"SQLのJava文字リテラルへの整形(:Sqltoj, :Sqlfromj)
+function! SQLToJava()
+%s/^\(.\+\)$/"\1 " \+/g
+ 
+normal G$
+execute "normal ?+\&lt;CR&gt;"
+normal xxggVG
+echo "Convert to Java String is finished."
+endfunction
+command! Sqltoj :call SQLToJava()
+function! SQLFromJava()
+%s/^"\(.\+\) " *+*$/\1/g
+ 
+normal ggVG
+echo "Convert from Java String is finished."
+endfunction
+command! Sqlfromj :call SQLFromJava()
+ 
+" Ruby用設定
+" :makeでRuby構文チェック
+au FileType ruby setlocal makeprg=ruby\ -c\ %
+au FileType ruby setlocal errorformat=%m\ in\ %f\ on\ line\ %l
+ 
+" Scala用設定
+" ファイルタイプの追加
+augroup filetypedetect
+autocmd! BufNewFile,BufRead *.scala setfiletype scala
+autocmd! BufNewFile,BufRead *.sbt setfiletype scala
+augroup END
+autocmd BufWritePost *.php silent make | if len(getqflist()) != 1 | copen | else | cclose | endif
+ 
+" 行末、行の最初への移動のキーマップ設定
+:map! <C-e> <Esc>$a
+:map! <C-a> <Esc>^a
+:map <C-e> <Esc>$a
+:map <C-a> <Esc>^a
+ 
+" Ctrl+dで$、Ctrl+aで@
+inoremap <C-d> $
+inoremap <C-a> @
+ 
+" \ + rでスクリプト実行
+nmap <Leader>r <plug>(quickrun)
+ 
+" 全角スペースのハイライトを設定
+function! ZenkakuSpace()
+  highlight ZenkakuSpace cterm=underline ctermfg=darkgrey gui=underline guifg=darkgrey
+endfunction
+ 
+if has('syntax')
+  augroup ZenkakuSpace
+    autocmd!
+    " ZenkakuSpaceをカラーファイルで設定するなら次の行は削除
+    autocmd ColorScheme       * call ZenkakuSpace()
+    " 全角スペースのハイライト指定
+    autocmd VimEnter,WinEnter * match ZenkakuSpace / /
+  augroup END
+  call ZenkakuSpace()
+endif
