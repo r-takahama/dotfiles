@@ -1,0 +1,36 @@
+defencoding utf8
+encoding utf8 utf8
+
+# ^t 自体を端末に送りたいときは ^t^t
+escape ^t^t
+
+startup_message off
+autodetach on
+vbell off
+defscrollback 1000
+altscreen on # less or lv uses alternate screen
+defflow off # screen + emacs problem
+
+# caption always (pane)
+setenv CAPTION_ALWAYS ""
+setenv CAPTION_ALWAYS "$CAPTION_ALWAYS%{= KW}"
+setenv CAPTION_ALWAYS "$CAPTION_ALWAYS %H "
+
+setenv CAPTION_ALWAYS "$CAPTION_ALWAYS%-w"
+setenv CAPTION_ALWAYS "$CAPTION_ALWAYS%{= yk} %n:%t "
+setenv CAPTION_ALWAYS "$CAPTION_ALWAYS%{-}%+w"
+
+setenv CAPTION_ALWAYS "$CAPTION_ALWAYS "
+setenv CAPTION_ALWAYS "$CAPTION_ALWAYS%= " # sator ?
+setenv CAPTION_ALWAYS "$CAPTION_ALWAYS%Y-%m-%d %02c "
+# LANG=jp で曜日表記すると，caption で文字化けする可能性あり
+
+caption always "$CAPTION_ALWAYS"
+unsetenv CAPTION_ALWAYS
+
+# hardstatus (session)
+setenv HARDSTATUS_ALWAYS ""
+
+# hardstatus alwayslastline "$HARDSTATUS_ALWAYS"
+unsetenv HARDSTATUS_ALWAYS
+

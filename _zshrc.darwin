@@ -1,0 +1,49 @@
+# GNU like
+## homebrew/findutils
+alias find='gfind'
+alias locate='glocate'
+alias updatedb='gupdatedb'
+alias xargs='gxargs'
+
+## homebrew/gnu-tar, gnu-sed, gawk
+alias tar='gtar'
+alias sed='gsed'
+alias awk='gawk'
+
+alias zcat='gzcat'
+
+# OS X
+alias o='open'
+alias of='open .'
+
+# zaw
+# source ~/.zsh/zaw/zaw.zsh
+# zstyle ':filter-select' case-insensitive yes
+# bindkey '^l' zaw-cdr
+
+if [ -d /usr/local/opt/coreutils/libexec/gnubin ]; then # GNU ls in coreutils
+else # BSD ls
+  # -G  -- enable colorized output
+  export LSCOLORS=gxfxcxdxbxegedabagacad
+  alias l='ls -lhGAF'
+  alias ls='ls -GF'
+fi
+
+########################################################################
+# open files
+########################################################################
+# todo
+function op(){
+    selected_file=$(mdfind -name $@ | peco)
+    # _extentions='org|md|txt'
+    case $selected_file:e in
+        org|md|txt)
+            emacsclient -nw $selected_file
+            ;;
+        *)
+            open $selected_file
+            ;;
+    esac
+}
+
+# directory なら cd
